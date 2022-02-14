@@ -1,0 +1,26 @@
+body{
+    
+    margin: auto;
+}
+header{
+    background-color: gray;
+    display:flex;
+    align-items: center;
+    justify-content: space-between
+}
+footer{
+    background-color: gray;
+    
+}
+nav{
+    margin-left: auto;
+    margin-right: auto; 
+}
+nav a {
+    color: black;
+    font-size: 150%;
+}
+
+main{
+    margin: 16%;
+}
