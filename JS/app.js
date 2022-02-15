@@ -1,50 +1,97 @@
 'use strict';
 var allEmployee = [];
-function Employee(employeeID,fullName,department,level,gender){
-    this.employeeID=employeeID;
+function Employee(fullName,department,level,img){
+    this.employeeID=0;
     this.fullName=fullName;
     this.department=department;
     this.level=level;
-    this.imageURL=`./assets/${gender}.png`;;
+    this.imageURL=`./assets/${img}.jpg`;;
     this.salary=0;
-    allEmployee.push(this);
 };
 Employee.prototype.randomSalary=function(level){
     if(level=="Junior"){
-        return Math.floor(Math.random() * (1000 - 500 + 1) + 500);
+        return generateNumber(500,1000);
     }
     if(level=="Mid-Senior"){
-        return Math.floor(Math.random() * (1500 - 1000 + 1) + 1000);
+        return generateNumber(1000,1500);
     }
     if(level=="Senior"){
-        return Math.floor(Math.random() * (2000 - 1500 + 1) + 1500);
+        return generateNumber(1500,2000);
     }
-
 }
 Employee.prototype.calculatSalary=function(){
     let random=this.randomSalary(this.level)
     this.salary = random-=random*0.075;
 }
+Employee.prototype.generateUniqueID=function(){
+    this.employeeID = generateNumber(1000,9999);
+    for(let i=0;i<allEmployee.length;i++){
+        if(this.employeeID == allEmployee[i].employeeID){
+            this.employeeID = generateNumber(1000,9999);
+            i=-1
+        }
+    }
+}
 Employee.prototype.render=function(){
-    document.write(`<div class="employee"><br><img class="icon" src="${this.imageURL}"></img><br><div>`);
-    document.write(`<h1>${this.fullName[0]+" "+this.fullName[1]+"<br> Salary "+this.salary}</h1><div>`);
+    let showEmployee = document.getElementById("showEmployee");
+    let div = document.createElement("div");
+    div.setAttribute("class", "EM");
+    div.setAttribute("id", this.employeeID);
+    showEmployee.appendChild(div);
+    let showDiv=document.getElementById(this.employeeID);
+    let img = document.createElement("img");
+    img.setAttribute("src", this.imageURL);
+    img.setAttribute("class", "icon");
+    let prainFirst = document.createElement("p");
+    let printSecond = document.createElement("p");
+    let printThird = document.createElement("p");
+   
+    
+    prainFirst.textContent="Name: "+this.fullName[0]+" "+this.fullName[1]+" - ID: "+this.employeeID;
+    printSecond.textContent="Department: "+this.department+" - Level:  "+this.level;
+    printThird.textContent=this.salary+"$";
+    showDiv.appendChild(img);
+    showDiv.appendChild(prainFirst);
+    showDiv.appendChild(printSecond);
+    showDiv.appendChild(printThird);
+}
+function generateNumber (min,max){
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-let ghazi = new Employee(1000,["Ghazi","Samer"],"Administration","Senior","male");
-ghazi.calculatSalary();
-let lana  = new Employee(1000,["Lana","Alipe"],"Finance","Senior","female");
-lana.calculatSalary();
-let tamara  = new Employee(1000,["Tamara","Ayoub"],"Marketing","Mid-Senior","female");
-tamara.calculatSalary();
-let safi = new Employee(1000,["Safi","Walid"],"Administration","Mid-Senior","male");
-safi.calculatSalary();
-let omar = new Employee(1000,["Omar","Zaid"],"Development","Senior","male");
-omar.calculatSalary();
-let rana = new Employee(1000,["Rana","Saleh"],"Development","Junior","female");
-rana.calculatSalary();
-let hadi = new Employee(1000,["Hadi","Ahmad"],"Finance","Mid-Senior","male");
-hadi.calculatSalary();
-
-for (let i = 0; i < allEmployee.length; i++) {
-    allEmployee[i].render();
+function addEmployee(fullName,department,level,Img){
+    let newEmp=new Employee(fullName,department,level,Img);
+    newEmp.generateUniqueID();
+    newEmp.calculatSalary();
+    allEmployee.push(newEmp);
+    return newEmp;
 }
+
+function handelSubmit(event){
+        event.preventDefault();
+        let name = event.target.name.value.split(" ");
+        name[0]=name[0].charAt(0).toUpperCase() + name[0].slice(1)
+        if(name.length==1) {
+            name.push("")
+        }
+        name[1]=name[1].charAt(0).toUpperCase() + name[1].slice(1)
+        let department = event.target.department.value;
+        let img = event.target.image.value;
+        if(img==''){
+            img='male'
+        }
+        let level = event.target.level.value;
+        
+        let newEmp = addEmployee(name,department,level,img);
+        newEmp.render(print);
+        
+}
+document.getElementById("dataForm").addEventListener("submit", handelSubmit);
+
+
+ 
+
+
+
+
+ 
