@@ -3,14 +3,24 @@ body{
     margin: auto;
 }
 header{
-    background-color: gray;
-    display:flex;
+    background-color: grey;
+    display: flex;
     align-items: center;
-    justify-content: space-between
+    height:80px;
+    justify-content: space-between;
 }
 footer{
-    background-color: gray;
-    
+    background-color: gray; 
+    width: 100%;
+    bottom: 0px;
+    padding-top: 10px; 
+    padding-bottom: 10px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    flex-direction: column;
+
 }
 nav{
     margin-left: auto;
@@ -22,5 +32,26 @@ nav a {
 }
 
 main{
+    display: flex;
+    align-items: center;
+    height:80px;
+    justify-content: space-between;
     margin: 16%;
+}
+
+#table{
+    width: 100%;
+    height: 250px;
+    padding: 7px;
+    background-color:antiquewhite;
+}
+
+th{
+    font-size: 20px;
+    padding: 10px;
+}
+td{
+    font-size: 20px;
+    text-align: center;
+    
 }

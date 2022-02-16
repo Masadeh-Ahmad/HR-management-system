@@ -5,7 +5,7 @@ function Employee(fullName,department,level,img){
     this.fullName=fullName;
     this.department=department;
     this.level=level;
-    this.imageURL=`./assets/${img}.jpg`;;
+    this.imageURL=img;
     this.salary=0;
 };
 Employee.prototype.randomSalary=function(level){
@@ -21,7 +21,8 @@ Employee.prototype.randomSalary=function(level){
 }
 Employee.prototype.calculatSalary=function(){
     let random=this.randomSalary(this.level)
-    this.salary = random-=random*0.075;
+    random-=random*0.075;
+    this.salary = random;
 }
 Employee.prototype.generateUniqueID=function(){
     this.employeeID = generateNumber(1000,9999);
@@ -66,7 +67,10 @@ function addEmployee(fullName,department,level,Img){
     allEmployee.push(newEmp);
     return newEmp;
 }
-
+function clearEmployees(){
+    localStorage.clear();
+    location.reload();
+}
 function handelSubmit(event){
         event.preventDefault();
         let name = event.target.name.value.split(" ");
@@ -78,20 +82,41 @@ function handelSubmit(event){
         let department = event.target.department.value;
         let img = event.target.image.value;
         if(img==''){
-            img='male'
+            img='./assets/male.jpg'
         }
         let level = event.target.level.value;
-        
+        getData();
         let newEmp = addEmployee(name,department,level,img);
         newEmp.render(print);
+        saveData();  
         
 }
+function renderAll(){
+    document.getElementById("showEmployee").innerHTML="";
+    for(let i of allEmployee){
+        i.render();
+    }
+}
+function saveData(){
+    localStorage.setItem("employee", JSON.stringify(allEmployee));
+}
+function retrieveObject(obj) {
+    let newObj=new Employee(obj.fullName,obj.department,obj.level,obj.imageURL);
+    newObj.employeeID=obj.employeeID;
+    newObj.salary=obj.salary;
+    allEmployee.push(newObj);
+}
+function getData(){
+    let parseEmployee = JSON.parse(localStorage.getItem("employee"));
+    console.log(parseEmployee)
+    if(parseEmployee!=null){
+        allEmployee=[];
+        for(let i of parseEmployee){
+            retrieveObject(i);
+        }
+    }
+    renderAll();
+}
 document.getElementById("dataForm").addEventListener("submit", handelSubmit);
-
-
- 
-
-
-
-
- 
+document.getElementById("reset").addEventListener("click",clearEmployees)
+getData();
